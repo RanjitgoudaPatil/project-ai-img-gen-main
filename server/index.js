@@ -22,7 +22,7 @@ app.get('/', async (req, res) => {
 const startServer = async () => {
     try {
         connectDB(process.env.MONGODB_URL);
-        app.listen(8080, () => console.log('Server has started on port https://dall-e-m7c8.onrender.com'))
+        app.listen(8080, () => console.log('Server has started on port https://project-ai-img-gen-main.onrender.com'))
     } catch (error) {
         console.log(error);
     }

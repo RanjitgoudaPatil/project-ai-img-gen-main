@@ -19,17 +19,30 @@ const CreatePost = () => {
     if(form.prompt) {
       try {
         setGeneratingImg(true);
-        const response = await fetch('https://dall-e-m7c8.onrender.com/api/v1/dalle', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ prompt: form.prompt }),
-        })
+        const response = await fetch('https://project-ai-img-gen-main.onrender.com/api/v1/dalle', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ prompt: form.prompt }),
+});
 
-        const data = await response.json();
+const isJson = response.headers.get('content-type')?.includes('application/json');
+if (!response.ok) {
+  let errorMsg;
+  if (isJson) {
+    const errData = await response.json();
+    errorMsg = errData?.message || JSON.stringify(errData);
+  } else {
+    errorMsg = await response.text();
+  }
+  throw new Error(errorMsg || 'Image generation failed');
+}
 
-        setForm({ ...form, photo: 'data:image/jpeg;base64,${data.photo}'})
+const data = isJson ? await response.json() : {};
+setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+
+
       } catch (error) {
         alert(error);
       } finally {

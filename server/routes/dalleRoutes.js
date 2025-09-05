@@ -39,9 +39,10 @@ router.route('/').post(async (req, res) => {
         if (error.response) {
             console.error('OpenAI API Error Status:', error.response.status);
             console.error('OpenAI API Error Data:', error.response.data); // This is likely the "Incorrect" message
-            res.status(error.response.status).json(error.response.data); // Send back the actual error from OpenAI
+           res.status(error.response.status).json({ success: false, error: error.response.data }); // Send back the actual error from OpenAI
         } else {
-            res.status(500).json({ message: 'Something went wrong on the server or with the OpenAI API request.', details: error.message });
+           res.status(500).json({ success: false, error: error.message });
+
         }
         console.error('-----------------------------------------');
     }
